@@ -8,53 +8,82 @@
     :root{--bg:#f8fafc;--card:#fff;--accent:#2563eb}
     body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
          margin:0; min-height:100vh; display:flex;align-items:center;
-         justify-content:center;background:var(--bg)}
-    .card{background:var(--card); padding:28px; border-radius:12px;
+         justify-content:center;background:var(--bg);padding:20px}
+    .card{background:var(--card); padding:24px; border-radius:12px;
           box-shadow:0 8px 40px rgba(2,6,23,.08);
-          width:min(720px,94vw); text-align:center}
+          width:min(980px,98vw); text-align:center}
     input{padding:10px 12px; font-size:16px; border-radius:8px;
-          border:1px solid #d1d5db; width:70%}
+          border:1px solid #d1d5db; width:65%}
     button{padding:10px 14px; margin-left:8px; border-radius:8px;
            border:none; background:var(--accent); color:white; cursor:pointer}
     button:hover{background:#1e40af}
     #error{color:#dc2626; margin-top:10px; height:18px}
     #site{display:none; margin-top:18px; text-align:left}
+    .gallery{
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      gap:20px;
+      background-color:#ffe6f2; /* light pink */
+      padding:20px;
+      border-radius:12px;
+      margin-top:20px;
+      min-height:200px;
+      flex-wrap:wrap;
+    }
+    .gallery img{
+      width:30%;
+      max-width:320px;
+      border-radius:12px;
+      box-shadow:0 6px 18px rgba(0,0,0,.08);
+      object-fit:cover;
+    }
+
+    /* responsive: stack on small screens */
+    @media (max-width:720px){
+      input{width:60%}
+      .gallery img{width:100%}
+    }
   </style>
 </head>
 <body>
-  <div class="card">
+  <div class="card" role="main">
     <h2>Enter Passcode to View Site</h2>
     <div>
-      <input id="pass" type="password" placeholder="Passcode" />
+      <input id="pass" type="password" placeholder="Passcode" aria-label="Passcode" />
       <button id="go">Unlock</button>
     </div>
-    <div id="error"></div>
+    <div id="error" aria-live="polite"></div>
 
-    <!-- Your real site content goes here -->
-    <div id="site">
+    <!-- All hidden content goes in ONE #site -->
+    <div id="site" aria-hidden="true">
       <h3>Welcome — Private Content</h3>
       <p>This part only appears after you enter the correct passcode.</p>
 
-      <!-- Example image -->
-      <div>
-        <img src="assets/lab1.jpg" alt="Lab 1"
-             style="max-width:100%;border-radius:12px;
-             box-shadow:0 6px 18px rgba(0,0,0,.08)"/>
-      </div>
+      <!-- Image gallery row with your bird image + 2 placeholders -->
+      <div class="gallery" role="region" aria-label="Image gallery">
+        <!-- Bird image -->
+        <img src="https://birdlifedata.blob.core.windows.net/species-images/22697748.jpg"
+             alt="Bird species image" />
 
-      <!-- Add more of your site here -->
+        <!-- Placeholder Image 2 -->
+        <img src="https://picsum.photos/600/400?random=2"
+             alt="Placeholder 2" />
+
+        <!-- Placeholder Image 3 -->
+        <img src="https://picsum.photos/600/400?random=3"
+             alt="Placeholder 3" />
+      </div>
     </div>
   </div>
 
   <script>
-    // === SETUP ===
-    // Replace with SHA-256 hash of your passcode
+    // === STORED HASH (as requested) ===
     const STORED_HASH = "f60fd9af557e39f58c9a57cc48c25f3ed81fc9b3196176ea3ed2dcf61458ccf8";
 
-    // helper: convert buffer to hex
     function hex(buffer){
-      const b = new Uint8Array(buffer);
-      return Array.from(b).map(x => x.toString(16).padStart(2,'0')).join('');
+      return Array.from(new Uint8Array(buffer))
+        .map(x => x.toString(16).padStart(2,'0')).join('');
     }
     async function sha256hex(str){
       const enc = new TextEncoder();
@@ -63,65 +92,31 @@
       return hex(hash);
     }
 
-    // unlock logic
     async function unlock(){
       const input = document.getElementById('pass').value || "";
       const err = document.getElementById('error');
       err.textContent = "";
-      const h = await sha256hex(input);
-      if(h === STORED_HASH){
-        document.getElementById('site').style.display = 'block';
-        document.querySelector('h2').style.display = 'none';
-        document.getElementById('pass').style.display = 'none';
-        document.getElementById('go').style.display = 'none';
-      } else {
-        err.textContent = "Incorrect passcode.";
+      try {
+        const h = await sha256hex(input);
+        if(h === STORED_HASH){
+          document.getElementById('site').style.display = 'block';
+          document.getElementById('site').setAttribute('aria-hidden','false');
+          document.querySelector('h2').style.display = 'none';
+          document.getElementById('pass').style.display = 'none';
+          document.getElementById('go').style.display = 'none';
+        } else {
+          err.textContent = "Incorrect passcode.";
+        }
+      } catch(e){
+        console.error(e);
+        err.textContent = "Unexpected error.";
       }
     }
 
     document.getElementById('go').addEventListener('click', unlock);
     document.getElementById('pass').addEventListener('keydown', e=>{
-      if(e.key==="Enter") unlock();
+      if(e.key === "Enter") unlock();
     });
   </script>
 </body>
 </html>
-
-
-<!-- Hidden site content -->
-<div id="site" style="display:none;">
-  <h3>Welcome — Private Content</h3>
-  <p>This part only appears after you enter the correct passcode.</p>
-
-  <!-- Image gallery row with your bird image + 2 placeholders -->
-  <div style="
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    gap:20px;
-    background-color:#ffe6f2; /* light pink */
-    padding:20px;
-    border-radius:12px;
-    margin-top:20px;
-    min-height:200px;
-  ">
-    <!-- Bird image you provided -->
-    <img src="https://birdlifedata.blob.core.windows.net/species-images/22697748.jpg"
-         alt="Bird species image"
-         style="width:30%; border-radius:12px;
-         box-shadow:0 6px 18px rgba(0,0,0,.08)" />
-
-    <!-- Placeholder Image 2 -->
-    <img src="https://picsum.photos/300/200?random=2"
-         alt="Placeholder 2"
-         style="width:30%; border-radius:12px;
-         box-shadow:0 6px 18px rgba(0,0,0,.08)" />
-
-    <!-- Placeholder Image 3 -->
-    <img src="https://picsum.photos/300/200?random=3"
-         alt="Placeholder 3"
-         style="width:30%; border-radius:12px;
-         box-shadow:0 6px 18px rgba(0,0,0,.08)" />
-  </div>
-</div>
-
