@@ -1,36 +1,89 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Enter Passcode</title>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Passcode Protected Site</title>
   <style>
-    body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background: #f0f4ff; }
-    .box { background: white; padding: 2rem; border-radius: 1rem; box-shadow: 0 5px 20px rgba(0,0,0,0.15); text-align: center; }
-    input { padding: 0.5rem; margin-top: 1rem; border: 1px solid #ccc; border-radius: 0.5rem; }
-    button { margin-top: 1rem; padding: 0.5rem 1rem; border: none; background: #2563eb; color: white; border-radius: 0.5rem; cursor: pointer; }
-    button:hover { background: #1e40af; }
+    :root{--bg:#f8fafc;--card:#fff;--accent:#2563eb}
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
+         margin:0; min-height:100vh; display:flex;align-items:center;
+         justify-content:center;background:var(--bg)}
+    .card{background:var(--card); padding:28px; border-radius:12px;
+          box-shadow:0 8px 40px rgba(2,6,23,.08);
+          width:min(720px,94vw); text-align:center}
+    input{padding:10px 12px; font-size:16px; border-radius:8px;
+          border:1px solid #d1d5db; width:70%}
+    button{padding:10px 14px; margin-left:8px; border-radius:8px;
+           border:none; background:var(--accent); color:white; cursor:pointer}
+    button:hover{background:#1e40af}
+    #error{color:#dc2626; margin-top:10px; height:18px}
+    #site{display:none; margin-top:18px; text-align:left}
   </style>
 </head>
 <body>
-  <div class="box">
-    <h2>Enter Passcode</h2>
-    <input type="password" id="passcode" placeholder="Passcode" />
-    <br />
-    <button onclick="checkPasscode()">Submit</button>
-    <p id="error" style="color:red;"></p>
+  <div class="card">
+    <h2>Enter Passcode to View Site</h2>
+    <div>
+      <input id="pass" type="password" placeholder="Passcode" />
+      <button id="go">Unlock</button>
+    </div>
+    <div id="error"></div>
+
+    <!-- Your real site content goes here -->
+    <div id="site">
+      <h3>Welcome — Private Content</h3>
+      <p>This part only appears after you enter the correct passcode.</p>
+
+      <!-- Example image -->
+      <div>
+        <img src="assets/lab1.jpg" alt="Lab 1"
+             style="max-width:100%;border-radius:12px;
+             box-shadow:0 6px 18px rgba(0,0,0,.08)"/>
+      </div>
+
+      <!-- Add more of your site here -->
+    </div>
   </div>
 
   <script>
-    function checkPasscode() {
-      const input = document.getElementById('passcode').value;
-      const correct = "secret123"; // <- change this to your passcode
-      if (input === correct) {
-        window.location.href = "site.html"; // redirect to your actual site
+    // === SETUP ===
+    // Replace with SHA-256 hash of your passcode
+    const STORED_HASH = "f60fd9af557e39f58c9a57cc48c25f3ed81fc9b3196176ea3ed2dcf61458ccf8";
+
+    // helper: convert buffer to hex
+    function hex(buffer){
+      const b = new Uint8Array(buffer);
+      return Array.from(b).map(x => x.toString(16).padStart(2,'0')).join('');
+    }
+    async function sha256hex(str){
+      const enc = new TextEncoder();
+      const data = enc.encode(str);
+      const hash = await crypto.subtle.digest('SHA-256', data);
+      return hex(hash);
+    }
+
+    // unlock logic
+    async function unlock(){
+      const input = document.getElementById('pass').value || "";
+      const err = document.getElementById('error');
+      err.textContent = "";
+      const h = await sha256hex(input);
+      if(h === STORED_HASH){
+        document.getElementById('site').style.display = 'block';
+        document.querySelector('h2').style.display = 'none';
+        document.getElementById('pass').style.display = 'none';
+        document.getElementById('go').style.display = 'none';
       } else {
-        document.getElementById('error').textContent = "Incorrect passcode.";
+        err.textContent = "Incorrect passcode.";
       }
     }
+
+    document.getElementById('go').addEventListener('click', unlock);
+    document.getElementById('pass').addEventListener('keydown', e=>{
+      if(e.key==="Enter") unlock();
+    });
   </script>
 </body>
 </html>
+
