@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Enter Passcode</title>
+  <style>
+    body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background: #f0f4ff; }
+    .box { background: white; padding: 2rem; border-radius: 1rem; box-shadow: 0 5px 20px rgba(0,0,0,0.15); text-align: center; }
+    input { padding: 0.5rem; margin-top: 1rem; border: 1px solid #ccc; border-radius: 0.5rem; }
+    button { margin-top: 1rem; padding: 0.5rem 1rem; border: none; background: #2563eb; color: white; border-radius: 0.5rem; cursor: pointer; }
+    button:hover { background: #1e40af; }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h2>Enter Passcode</h2>
+    <input type="password" id="passcode" placeholder="Passcode" />
+    <br />
+    <button onclick="checkPasscode()">Submit</button>
+    <p id="error" style="color:red;"></p>
+  </div>
+
+  <script>
+    function checkPasscode() {
+      const input = document.getElementById('passcode').value;
+      const correct = "secret123"; // <- change this to your passcode
+      if (input === correct) {
+        window.location.href = "site.html"; // redirect to your actual site
+      } else {
+        document.getElementById('error').textContent = "Incorrect passcode.";
+      }
+    }
+  </script>
+</body>
+</html>
