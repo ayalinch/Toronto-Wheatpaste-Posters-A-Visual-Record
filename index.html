@@ -13,7 +13,7 @@
     }
 
     .container { width: 100%; text-align: center; }
-    h2 { margin-bottom: 20px; }
+    h2 { margin: 0; }
 
     /* LANDING PAGE COLLAGE */
     #landing {
@@ -50,6 +50,37 @@
       z-index: 2;
     }
 
+    /* POSTERS HEADER */
+    .posters-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 20px;
+      background: #fff;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .back-btn {
+      padding: 8px 14px;
+      font-size: 14px;
+      border: none;
+      border-radius: 8px;
+      background: #2563eb;
+      color: white;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+    .back-btn:hover {
+      background: #1e40af;
+    }
+
+    .search-bar input {
+      padding: 8px 12px;
+      font-size: 14px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+
     /* GALLERY */
     .gallery {
       display: grid;
@@ -57,7 +88,7 @@
       gap: 12px;
       width: 100%;
       max-width: 98vw;
-      margin: 0 auto;
+      margin: 20px auto;
       box-sizing: border-box;
     }
     .gallery img {
@@ -70,12 +101,6 @@
       transition: transform 0.2s ease;
     }
     .gallery img:hover { transform: scale(1.02); }
-
-    /* BACK BUTTON */
-    #posters button {
-      margin-top: -10px;
-      margin-bottom: 10px;
-    }
 
     /* Lightbox */
     .lightbox {
@@ -111,23 +136,22 @@
       transition: transform 0.1s ease;
       cursor: zoom-in;
     }
-.caption {
-  padding: 20px;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;   /* keep caption centered */
-  text-align: left;
-  position: relative;        /* so we can anchor the date */
-}
-
-.caption small {
-  position: absolute;
-  bottom: 10px;   /* stick to bottom */
-  left: 20px;
-  font-size: 0.8rem;
-  color: #555;
-}
+    .caption {
+      padding: 20px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      text-align: left;
+      position: relative;
+    }
+    .caption small {
+      position: absolute;
+      bottom: 10px;
+      left: 20px;
+      font-size: 0.8rem;
+      color: #555;
+    }
     .close {
       position: absolute;
       top: 20px; right: 20px;
@@ -172,23 +196,28 @@
     <!-- Landing Page -->
     <div id="landing" class="page active">
       <div class="collage">
-        <!-- Images duplicated for smooth infinite scroll -->
         <img src="IMG_0677.jpg"><img src="IMG_5918.jpg"><img src="IMG_3241.jpg">
         <img src="IMG_3021.jpg"><img src="IMG_1672.jpg"><img src="IMG_5378.jpg">
         <img src="IMG_0677.jpg"><img src="IMG_5918.jpg"><img src="IMG_3241.jpg">
         <img src="IMG_3021.jpg"><img src="IMG_1672.jpg"><img src="IMG_5378.jpg">
       </div>
       <div class="landing-title" onclick="showPage('posters')">
-        Toronto Wheatpaste Posters: A Visual Record by Sarah & Ayalinch 
+        Toronto Wheatpaste Posters: A Visual Record by Sarah & Ayalinch
       </div>
     </div>
 
     <!-- Posters Page -->
     <div id="posters" class="page">
-      <h2>Posters</h2>
-      <button onclick="showPage('landing')">⬅ Back</button>
+      <div class="posters-header">
+        <button class="back-btn" onclick="showPage('landing')">⬅ Back</button>
+        <h2>Posters</h2>
+        <div class="search-bar">
+          <input type="text" id="searchBox" placeholder="Search posters...">
+        </div>
+      </div>
+
       <div class="gallery">
-<img src="IMG_0677.jpg" alt="Poster 7" data-caption="<div>[MW Industries] Quad of MW Vintage Parody ads. Television Dinners | ADHD Doital | Perfectly Safe teen razors | Monatryl-TL Allergy Relief (@mwcorporations on Instagram)</div><small>Taken: Unknown — Location: Unknown</small>">
+  <img src="IMG_0677.jpg" alt="Poster 7" data-caption="<div>[MW Industries] Quad of MW Vintage Parody ads. Television Dinners | ADHD Doital | Perfectly Safe teen razors | Monatryl-TL Allergy Relief (@mwcorporations on Instagram)</div><small>Taken: Unknown — Location: Unknown</small>">
 <img src="IMG_5918.jpg" alt="Poster 39" data-caption="<div>[Sabrina Carpenter] Short N Sweet</div><small>Taken: Unknown — Location: Unknown</small>">
 <img src="IMG_3241.jpg" alt="Poster 25" data-caption="<div>[Sabrina Carpenter] Sabrina Carpenter is Man’s Best Friend</div><small>Taken: 2025-08-02 — Dundas Street West</small>">
 <img src="IMG_3021.jpg" alt="Poster 32" data-caption="<div>[FORA] Forget everything you know about travel agents</div><small>Taken: Unknown — Location: Unknown</small>">
@@ -241,7 +270,7 @@
 <img src="IMG_1890.jpg" alt="Poster 21" data-caption="<div>[Indie Artist: arcanebullshit.com] Read the “animal titles”...</div><small>Taken: 2025-05-09 — Bloor Street West</small>">
 <img src="IMG_5184.jpg" alt="Poster 31" data-caption="<div>[Fairgrounds] Court Time > Screen Time. Public Raquet Club</div><small>Taken: 2024-07-09 — Dundas Street West</small>">
 <img src="IMG_1887.jpg" alt="Poster 33" data-caption="<div>[Indie Artist: Arcanebullshit.com] ‘The Squirrel Council has decided’...</div><small>Taken: 2025-05-09 — Bloor Street West</small>">
-        <!-- (keep adding the rest of your posters here) -->
+        <!-- (your posters stay here exactly as before, no change needed) -->
       </div>
     </div>
   </div>
@@ -292,12 +321,8 @@
       lightboxImg.style.transform = "scale(1)";
     }
 
-    function showNext() {
-      openLightbox((currentIndex + 1) % images.length);
-    }
-    function showPrev() {
-      openLightbox((currentIndex - 1 + images.length) % images.length);
-    }
+    function showNext() { openLightbox((currentIndex + 1) % images.length); }
+    function showPrev() { openLightbox((currentIndex - 1 + images.length) % images.length); }
 
     images.forEach((img, index) => {
       img.addEventListener('click', () => openLightbox(index));
@@ -338,6 +363,16 @@
       const x = ((e.clientX - rect.left) / rect.width) * 100;
       const y = ((e.clientY - rect.top) / rect.height) * 100;
       lightboxImg.style.transformOrigin = `${x}% ${y}%`;
+    });
+
+    // SEARCH FUNCTION
+    const searchBox = document.getElementById("searchBox");
+    searchBox.addEventListener("input", () => {
+      const term = searchBox.value.toLowerCase();
+      images.forEach(img => {
+        const caption = img.getAttribute("data-caption").toLowerCase();
+        img.style.display = caption.includes(term) ? "block" : "none";
+      });
     });
   </script>
 </body>
