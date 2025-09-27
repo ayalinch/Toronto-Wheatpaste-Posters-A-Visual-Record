@@ -3,13 +3,14 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>Interactive Site</title>
+  <title>Toronto Wheat Paste Posters</title>
   <style>
     body {
       font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
       margin: 0;
       min-height: 100vh;
-      background: #f0f0f0;
+      background: #000;
+      color: white;
     }
 
     .container {
@@ -17,25 +18,52 @@
       text-align: center;
     }
 
-    h2 { margin-bottom: 20px; }
-
-    .menu {
+    /* Landing page as collage background */
+    #landing {
+      position: relative;
+      width: 100%;
+      height: 100vh;
       display: flex;
+      align-items: center;
       justify-content: center;
-      gap: 30px;
+      overflow: hidden;
     }
-    .menu button {
-      padding: 16px 28px;
-      font-size: 18px;
-      border: none;
-      border-radius: 10px;
-      background: #2563eb;
-      color: white;
-      cursor: pointer;
-      transition: background 0.2s ease;
-    }
-    .menu button:hover { background: #1e40af; }
 
+    #landing::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.4); /* dark overlay so text pops */
+      z-index: 1;
+    }
+
+    .collage {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+      grid-auto-rows: 60px;
+      gap: 2px;
+      width: 100%;
+      height: 100%;
+    }
+
+    .collage img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .landing-text {
+      position: absolute;
+      z-index: 2;
+      font-size: 2.2rem;
+      font-weight: bold;
+      text-align: center;
+      color: white;
+      padding: 10px 20px;
+    }
+
+    /* Posters gallery */
     .gallery {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -45,7 +73,6 @@
       margin: 0 auto;
       box-sizing: border-box;
     }
-
     .gallery img {
       width: 100%;
       height: auto;
@@ -68,7 +95,6 @@
       justify-content: center;
       z-index: 1000;
     }
-
     .lightbox-content {
       background: white;
       display: flex;
@@ -77,8 +103,6 @@
       border-radius: 8px;
       overflow: hidden;
     }
-
-    /* Container for zoom effect */
     .lightbox-img-container {
       flex: 0 0 60%;
       max-height: 90vh;
@@ -93,7 +117,6 @@
       transition: transform 0.1s ease;
       cursor: zoom-in;
     }
-
     .caption {
       padding: 20px;
       flex: 1;
@@ -102,7 +125,6 @@
       justify-content: center;
       text-align: left;
     }
-
     .close {
       position: absolute;
       top: 20px; right: 20px;
@@ -122,11 +144,40 @@
   <div class="container">
     <!-- Landing Page -->
     <div id="landing" class="page active">
-      <h2>Welcome — Choose a Section</h2>
-      <div class="menu">
-        <button onclick="showPage('posters')">📜 Posters</button>
-        <button onclick="showPage('book')">📘 Book</button>
+      <div class="collage">
+        <!-- use the same images you already loaded -->
+        <img src="IMG_0677.jpg" alt="">
+        <img src="IMG_5918.jpg" alt="">
+        <img src="IMG_3241.jpg" alt="">
+        <img src="IMG_3021.jpg" alt="">
+        <img src="IMG_1672.jpg" alt="">
+        <img src="IMG_5378.jpg" alt="">
+        <img src="IMG_0289.jpg" alt="">
+        <img src="IMG_0290.jpg" alt="">
+        <img src="IMG_0316.jpg" alt="">
+        <img src="IMG_0318.jpg" alt="">
+        <img src="IMG_1028.jpg" alt="">
+        <img src="IMG_1034.jpg" alt="">
+        <img src="IMG_1275.jpg" alt="">
+        <img src="IMG_1276.jpg" alt="">
+        <img src="IMG_1279.jpg" alt="">
+        <img src="IMG_1282.jpg" alt="">
+        <img src="IMG_1674.jpg" alt="">
+        <img src="IMG_1688.jpg" alt="">
+        <img src="IMG_1891.jpg" alt="">
+        <img src="IMG_1977.jpg" alt="">
+        <img src="IMG_3199.jpg" alt="">
+        <img src="IMG_3291.jpg" alt="">
+        <img src="IMG_3957.jpg" alt="">
+        <img src="IMG_4086.jpg" alt="">
+        <img src="IMG_4087.jpg" alt="">
+        <img src="IMG_4710.jpg" alt="">
+        <img src="IMG_5185.jpg" alt="">
+        <img src="IMG_5375.jpg" alt="">
+        <img src="IMG_5394.jpg" alt="">
+        <img src="IMG_5395.jpg" alt="">
       </div>
+      <div class="landing-text">Toronto Wheat Paste Posters by Sarah Kim</div>
     </div>
 
     <!-- Posters Page -->
