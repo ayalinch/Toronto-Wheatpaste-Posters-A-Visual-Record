@@ -43,17 +43,17 @@
 
     .collage {
       display: flex;
-      flex-direction: column;
-      animation: scroll-vertical 40s linear infinite;
+      flex-direction: row;
+      animation: scroll-horizontal 120s linear infinite; /* slow horizontal scroll */
     }
     .collage img {
-      width: 100%;
-      height: auto;
+      height: 100vh;
+      width: auto;
       opacity: 0.7;
     }
-    @keyframes scroll-vertical {
-      from { transform: translateY(0); }
-      to { transform: translateY(-50%); }
+    @keyframes scroll-horizontal {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
     }
 
     .landing-title {
@@ -152,7 +152,7 @@
     <!-- Landing Page -->
     <div id="landing" class="page active">
       <div class="collage">
-        <!-- Repeat images twice to make the loop seamless -->
+        <!-- Repeat images twice for seamless loop -->
         <img src="IMG_0289.jpg" alt="">
         <img src="IMG_0290.jpg" alt="">
         <img src="IMG_0291.jpg" alt="">
@@ -165,7 +165,7 @@
         <img src="IMG_1031.jpg" alt="">
         <img src="IMG_1032.jpg" alt="">
         <img src="IMG_1034.jpg" alt="">
-        <!-- Repeat again -->
+        <!-- repeat again for smooth loop -->
         <img src="IMG_0289.jpg" alt="">
         <img src="IMG_0290.jpg" alt="">
         <img src="IMG_0291.jpg" alt="">
