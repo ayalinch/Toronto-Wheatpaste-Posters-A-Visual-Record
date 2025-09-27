@@ -13,12 +13,9 @@
       color: white;
     }
 
-    .container {
-      width: 100%;
-      text-align: center;
-    }
+    .container { width: 100%; text-align: center; }
 
-    /* Landing page as collage background */
+    /* Landing page */
     #landing {
       position: relative;
       width: 100%;
@@ -34,7 +31,7 @@
       position: absolute;
       top: 0; left: 0;
       width: 100%; height: 100%;
-      background: rgba(0,0,0,0.5); /* dark overlay so text pops */
+      background: rgba(0,0,0,0.5); /* dark overlay */
       z-index: 1;
     }
 
@@ -66,21 +63,11 @@
     .landing-text {
       font-size: 2.2rem;
       font-weight: bold;
-      margin-bottom: 20px;
-    }
-
-    .enter-button {
-      padding: 14px 28px;
-      font-size: 18px;
-      border: none;
-      border-radius: 8px;
-      background: #2563eb;
-      color: white;
       cursor: pointer;
-      transition: background 0.2s ease;
+      transition: color 0.2s ease;
     }
-    .enter-button:hover {
-      background: #1e40af;
+    .landing-text:hover {
+      color: #60a5fa; /* light blue on hover */
     }
 
     /* Posters gallery */
@@ -104,7 +91,7 @@
     }
     .gallery img:hover { transform: scale(1.02); }
 
-    /* Lightbox overlay */
+    /* Lightbox */
     .lightbox {
       position: fixed;
       top: 0; left: 0;
@@ -165,41 +152,65 @@
     <!-- Landing Page -->
     <div id="landing" class="page active">
       <div class="collage">
-        <!-- fill with many thumbnails -->
-        <img src="IMG_0677.jpg" alt="">
-        <img src="IMG_5918.jpg" alt="">
-        <img src="IMG_3241.jpg" alt="">
-        <img src="IMG_3021.jpg" alt="">
-        <img src="IMG_1672.jpg" alt="">
-        <img src="IMG_5378.jpg" alt="">
-        <img src="IMG_0289.jpg" alt="">
-        <img src="IMG_0290.jpg" alt="">
-        <img src="IMG_0316.jpg" alt="">
-        <img src="IMG_0318.jpg" alt="">
-        <img src="IMG_1028.jpg" alt="">
-        <img src="IMG_1034.jpg" alt="">
-        <img src="IMG_1275.jpg" alt="">
-        <img src="IMG_1276.jpg" alt="">
-        <img src="IMG_1279.jpg" alt="">
-        <img src="IMG_1282.jpg" alt="">
-        <img src="IMG_1674.jpg" alt="">
-        <img src="IMG_1688.jpg" alt="">
-        <img src="IMG_1891.jpg" alt="">
-        <img src="IMG_1977.jpg" alt="">
-        <img src="IMG_3199.jpg" alt="">
-        <img src="IMG_3291.jpg" alt="">
-        <img src="IMG_3957.jpg" alt="">
-        <img src="IMG_4086.jpg" alt="">
-        <img src="IMG_4087.jpg" alt="">
-        <img src="IMG_4710.jpg" alt="">
-        <img src="IMG_5185.jpg" alt="">
-        <img src="IMG_5375.jpg" alt="">
-        <img src="IMG_5394.jpg" alt="">
-        <img src="IMG_5395.jpg" alt="">
+        <!-- a bunch of tiny posters -->
+        <img src="IMG_0289.jpg">
+        <img src="IMG_0290.jpg">
+        <img src="IMG_0291.jpg">
+        <img src="IMG_0315.jpg">
+        <img src="IMG_0316.jpg">
+        <img src="IMG_0318.jpg">
+        <img src="IMG_0677.jpg">
+        <img src="IMG_1028.jpg">
+        <img src="IMG_1030.jpg">
+        <img src="IMG_1031.jpg">
+        <img src="IMG_1032.jpg">
+        <img src="IMG_1034.jpg">
+        <img src="IMG_1275.jpg">
+        <img src="IMG_1276.jpg">
+        <img src="IMG_1277.jpg">
+        <img src="IMG_1279.jpg">
+        <img src="IMG_1282.jpg">
+        <img src="IMG_1672.jpg">
+        <img src="IMG_1674.jpg">
+        <img src="IMG_1688.jpg">
+        <img src="IMG_1887.jpg">
+        <img src="IMG_1890.jpg">
+        <img src="IMG_1891.jpg">
+        <img src="IMG_1977.jpg">
+        <img src="IMG_3021.jpg">
+        <img src="IMG_3199.jpg">
+        <img src="IMG_3241.jpg">
+        <img src="IMG_3291.jpg">
+        <img src="IMG_3957.jpg">
+        <img src="IMG_4086.jpg">
+        <img src="IMG_4087.jpg">
+        <img src="IMG_4710.jpg">
+        <img src="IMG_5184.jpg">
+        <img src="IMG_5185.jpg">
+        <img src="IMG_5375.jpg">
+        <img src="IMG_5378.jpg">
+        <img src="IMG_5394.jpg">
+        <img src="IMG_5395.jpg">
+        <img src="IMG_5915.jpg">
+        <img src="IMG_5916.jpg">
+        <img src="IMG_5918.jpg">
+        <img src="IMG_6671.jpg">
+        <img src="IMG_6672.jpg">
+        <img src="IMG_6673.jpg">
+        <img src="IMG_7141.jpg">
+        <img src="IMG_7142.jpg">
+        <img src="IMG_8586.jpg">
+        <img src="IMG_8587.jpg">
+        <img src="IMG_8607.jpg">
+        <img src="IMG_8608.jpg">
+        <img src="IMG_9210.jpg">
+        <img src="IMG_9460.jpg">
+        <img src="IMG_9824.jpg">
       </div>
       <div class="landing-overlay">
-        <div class="landing-text">Toronto Wheat Paste Posters by Sarah Kim</div>
-        <button class="enter-button" onclick="showPage('posters')">Enter</button>
+        <div class="landing-text" onclick="showPage('posters')">
+          Toronto Wheat Paste Posters by Sarah Kim
+        </div>
       </div>
     </div>
 
@@ -208,7 +219,7 @@
       <h2>Posters</h2>
       <button onclick="showPage('landing')">⬅ Back</button>
       <div class="gallery">
-<img src="IMG_0677.jpg" alt="Poster 7" data-caption="[MW Industries] Quad of MW Vintage Parody ads. Television Dinners | ADHD Doital | Perfectly Safe teen razors | Monatryl-TL Allergy Relief (@mwcorporations on Instagram)">
+ <img src="IMG_0677.jpg" alt="Poster 7" data-caption="[MW Industries] Quad of MW Vintage Parody ads. Television Dinners | ADHD Doital | Perfectly Safe teen razors | Monatryl-TL Allergy Relief (@mwcorporations on Instagram)">
 <img src="IMG_5918.jpg" alt="Poster 39" data-caption="[Sabrina Carpenter] Short N Sweet">
 <img src="IMG_3241.jpg" alt="Poster 25" data-caption="[Sabrina Carpenter] Sabrina Carpenter is Man’s Best Friend">
 <img src="IMG_3021.jpg" alt="Poster 32" data-caption="[FORA] Forget everything you know about travel agents">
@@ -263,13 +274,6 @@
 <img src="IMG_1887.jpg" alt="Poster 33" data-caption="[Indie Artist: Arcanebullshit.com] ‘The Squirrel Council has decided’ (I suggest zooming up on the ‘names’ of the squirrels, they are also hilarious ‘corn’ and ‘beefcake supreme’ for example)">
       </div>
     </div>
-
-    <!-- Book Page -->
-    <div id="book" class="page">
-      <h2>Book</h2>
-      <button onclick="showPage('landing')">⬅ Back</button>
-      <p>Here you can put book content later.</p>
-    </div>
   </div>
 
   <!-- Lightbox -->
@@ -294,7 +298,6 @@
     const lightboxImg = document.getElementById('lightbox-img');
     const lightboxCaption = document.getElementById('lightbox-caption');
     const lightboxImgContainer = document.querySelector('.lightbox-img-container');
-
     let zoomActive = false;
 
     images.forEach(img => {
@@ -317,9 +320,8 @@
       if (e.target === lightbox) closeLightbox();
     });
 
-    // Toggle zoom mode on click
     lightboxImg.addEventListener('click', (e) => {
-      e.stopPropagation(); // prevent closing
+      e.stopPropagation();
       zoomActive = !zoomActive;
       if (zoomActive) {
         lightboxImg.style.transform = "scale(2)";
@@ -330,7 +332,6 @@
       }
     });
 
-    // Follow cursor if zoom is active
     lightboxImgContainer.addEventListener('mousemove', (e) => {
       if (!zoomActive) return;
       const rect = lightboxImgContainer.getBoundingClientRect();
