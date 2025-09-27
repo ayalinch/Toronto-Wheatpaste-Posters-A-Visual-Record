@@ -42,27 +42,29 @@
       background: #1e40af;
     }
 
-    /* Gallery grid - 4 per row */
-    .gallery {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr); /* 4 per row */
-      gap: 10px;
-      width: 100vw;   /* full width, no padding */
-      margin: 0;
-    }
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 4 per row */
+  gap: 12px;               /* small spacing between posters */
+  width: 100%;
+  max-width: 98vw;         /* slight padding without scroll */
+  margin: 0 auto;          /* center the grid */
+  box-sizing: border-box;
+}
 
-    .gallery img {
-      width: 100%;
-      height: auto;
-      object-fit: contain;
-      cursor: pointer;
-      border-radius: 6px;
-      transition: transform 0.2s ease;
-    }
+.gallery img {
+  width: 100%;
+  height: auto;
+  object-fit: contain;     /* don’t cut the image */
+  cursor: pointer;
+  border-radius: 4px;
+  display: block;
+  transition: transform 0.2s ease;
+}
 
-    .gallery img:hover {
-      transform: scale(1.02);
-    }
+.gallery img:hover {
+  transform: scale(1.02);
+}
 
     /* Lightbox overlay */
     .lightbox {
