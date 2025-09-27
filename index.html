@@ -93,9 +93,6 @@
       transition: transform 0.1s ease;
       cursor: zoom-in;
     }
-    .lightbox-img-container img.zoomed {
-      cursor: crosshair;
-    }
 
     .caption {
       padding: 20px;
@@ -224,7 +221,7 @@
     const lightboxCaption = document.getElementById('lightbox-caption');
     const lightboxImgContainer = document.querySelector('.lightbox-img-container');
 
-    let zoomed = false;
+    let zoomActive = false;
 
     images.forEach(img => {
       img.addEventListener('click', () => {
@@ -238,30 +235,26 @@
       lightbox.style.display = 'none';
       lightboxImg.src = "";
       lightboxCaption.textContent = "";
-      lightboxImg.classList.remove('zoomed');
+      zoomActive = false;
       lightboxImg.style.transform = "scale(1)";
-      zoomed = false;
     }
 
     lightbox.addEventListener('click', (e) => {
       if (e.target === lightbox) closeLightbox();
     });
 
-    // Toggle zoom on click
-    lightboxImg.addEventListener('click', (e) => {
-      e.stopPropagation();
-      zoomed = !zoomed;
-      if (!zoomed) {
-        lightboxImg.classList.remove('zoomed');
+    // Toggle zoom mode on click
+    lightboxImg.addEventListener('click', () => {
+      zoomActive = !zoomActive;
+      if (!zoomActive) {
         lightboxImg.style.transform = "scale(1)";
-      } else {
-        lightboxImg.classList.add('zoomed');
+        lightboxImg.style.transformOrigin = "center center";
       }
     });
 
-    // Follow mouse when zoomed
+    // Follow cursor if zoom is active
     lightboxImgContainer.addEventListener('mousemove', (e) => {
-      if (!zoomed) return;
+      if (!zoomActive) return;
       const rect = lightboxImgContainer.getBoundingClientRect();
       const x = ((e.clientX - rect.left) / rect.width) * 100;
       const y = ((e.clientY - rect.top) / rect.height) * 100;
