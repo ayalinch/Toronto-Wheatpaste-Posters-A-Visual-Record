@@ -47,20 +47,25 @@
       background: #1e40af;
     }
 
-    /* Gallery grid */
-    .gallery {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 20px;
-      margin-top: 20px;
-    }
-    .gallery img {
-      width: 100%;
-      height: 300px;  /* makes them large but even */
-      object-fit: cover;
-      border-radius: 10px;
-      background: white;
-    }
+  /* Gallery grid */
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-top: 20px;
+  max-width: 1200px;  /* keeps it centered */
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.gallery img {
+  width: 100%;
+  height: auto;         /* keeps original aspect ratio */
+  max-height: 600px;    /* caps them so they don’t get too tall */
+  object-fit: contain;  /* makes sure full poster shows */
+  border-radius: 10px;
+  background: white;
+}
 
     /* Small screens */
     @media (max-width: 768px) {
