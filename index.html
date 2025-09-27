@@ -90,8 +90,12 @@
       width: 100%;
       height: 100%;
       object-fit: contain;
-      transition: transform 0.2s ease;
+      transition: transform 0.3s ease;
       cursor: zoom-in;
+    }
+    .lightbox-img-container img.zoomed {
+      transform: scale(2);
+      cursor: zoom-out;
     }
 
     .caption {
@@ -220,7 +224,6 @@
     const lightbox = document.getElementById('lightbox');
     const lightboxImg = document.getElementById('lightbox-img');
     const lightboxCaption = document.getElementById('lightbox-caption');
-    const lightboxImgContainer = document.querySelector('.lightbox-img-container');
 
     images.forEach(img => {
       img.addEventListener('click', () => {
@@ -234,23 +237,17 @@
       lightbox.style.display = 'none';
       lightboxImg.src = "";
       lightboxCaption.textContent = "";
+      lightboxImg.classList.remove('zoomed'); // reset zoom when closed
     }
 
     lightbox.addEventListener('click', (e) => {
       if (e.target === lightbox) closeLightbox();
     });
 
-    // Zoom effect
-    lightboxImgContainer.addEventListener('mousemove', (e) => {
-      const rect = lightboxImgContainer.getBoundingClientRect();
-      const x = ((e.clientX - rect.left) / rect.width) * 100;
-      const y = ((e.clientY - rect.top) / rect.height) * 100;
-      lightboxImg.style.transformOrigin = `${x}% ${y}%`;
-      lightboxImg.style.transform = "scale(2)";
-    });
-    lightboxImgContainer.addEventListener('mouseleave', () => {
-      lightboxImg.style.transformOrigin = "center center";
-      lightboxImg.style.transform = "scale(1)";
+    // Toggle zoom on click
+    lightboxImg.addEventListener('click', (e) => {
+      e.stopPropagation(); // prevent closing lightbox
+      lightboxImg.classList.toggle('zoomed');
     });
   </script>
 </body>
