@@ -26,7 +26,7 @@
     .collage {
       display: flex;
       flex-direction: row;
-      width: 200%; /* doubled for seamless scroll */
+      width: 200%;
       animation: scroll-horizontal 120s linear infinite;
     }
     .collage img {
@@ -58,6 +58,7 @@
       padding: 12px 20px;
       background: #fff;
       border-bottom: 1px solid #ddd;
+      gap: 12px;
     }
 
     .posters-header h2 {
@@ -76,11 +77,15 @@
       cursor: pointer;
       transition: background 0.2s ease;
     }
-    .back-btn:hover {
-      background: #1e40af;
-    }
+    .back-btn:hover { background: #1e40af; }
 
-    .search-bar input {
+    .search-filter {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .search-filter input,
+    .search-filter select {
       padding: 8px 12px;
       font-size: 14px;
       border: 1px solid #ccc;
@@ -185,15 +190,8 @@
     .arrow.right { right: 10px; }
 
     /* Page transitions */
-    .page {
-      display: none;
-      opacity: 0;
-      transition: opacity 0.5s ease;
-    }
-    .page.active {
-      display: block;
-      opacity: 1;
-    }
+    .page { display: none; opacity: 0; transition: opacity 0.5s ease; }
+    .page.active { display: block; opacity: 1; }
   </style>
 </head>
 <body>
@@ -202,8 +200,6 @@
     <!-- Landing Page -->
     <div id="landing" class="page active">
       <div class="collage">
-        <img src="IMG_0677.jpg"><img src="IMG_5918.jpg"><img src="IMG_3241.jpg">
-        <img src="IMG_3021.jpg"><img src="IMG_1672.jpg"><img src="IMG_5378.jpg">
         <img src="IMG_0677.jpg"><img src="IMG_5918.jpg"><img src="IMG_3241.jpg">
         <img src="IMG_3021.jpg"><img src="IMG_1672.jpg"><img src="IMG_5378.jpg">
       </div>
@@ -217,12 +213,16 @@
       <div class="posters-header">
         <button class="back-btn" onclick="showPage('landing')">⬅ Back</button>
         <h2>Posters</h2>
-        <div class="search-bar">
+        <div class="search-filter">
           <input type="text" id="searchBox" placeholder="Search posters...">
+          <select id="sortSelect">
+            <option value="newest">Newest → Oldest</option>
+            <option value="oldest">Oldest → Newest</option>
+          </select>
         </div>
       </div>
 
-      <div class="gallery">
+      <div class="gallery" id="gallery">
 <img src="IMG_0677.jpg" alt="Poster 7" data-caption="<div>[MW Industries] Quad of MW Vintage Parody ads. Television Dinners | ADHD Doital | Perfectly Safe teen razors | Monatryl-TL Allergy Relief (@mwcorporations on Instagram)</div><small>Taken: Unknown — Location: Unknown</small>">
 <img src="IMG_5918.jpg" alt="Poster 39" data-caption="<div>[Sabrina Carpenter] Short N Sweet</div><small>Taken: Unknown — Location: Unknown</small>">
 <img src="IMG_3241.jpg" alt="Poster 25" data-caption="<div>[Sabrina Carpenter] Sabrina Carpenter is Man’s Best Friend</div><small>Taken: 2025-08-02 — Dundas Street West</small>">
@@ -276,7 +276,7 @@
 <img src="IMG_1890.jpg" alt="Poster 21" data-caption="<div>[Indie Artist: arcanebullshit.com] Read the “animal titles”...</div><small>Taken: 2025-05-09 — Bloor Street West</small>">
 <img src="IMG_5184.jpg" alt="Poster 31" data-caption="<div>[Fairgrounds] Court Time > Screen Time. Public Raquet Club</div><small>Taken: 2024-07-09 — Dundas Street West</small>">
 <img src="IMG_1887.jpg" alt="Poster 33" data-caption="<div>[Indie Artist: Arcanebullshit.com] ‘The Squirrel Council has decided’...</div><small>Taken: 2025-05-09 — Bloor Street West</small>">
-        <!-- your poster <img> tags here -->
+        <!-- your poster <img> tags -->
       </div>
     </div>
   </div>
@@ -300,7 +300,8 @@
     document.getElementById(pageId).classList.add('active');
   }
 
-  const allImages = document.querySelectorAll('.gallery img');
+  const gallery = document.getElementById("gallery");
+  const allImages = Array.from(gallery.querySelectorAll("img"));
   const lightbox = document.getElementById('lightbox');
   const lightboxImg = document.getElementById('lightbox-img');
   const lightboxCaption = document.getElementById('lightbox-caption');
@@ -310,7 +311,7 @@
 
   let currentIndex = -1;
   let zoomActive = false;
-  let visibleImages = Array.from(allImages); // start with all
+  let visibleImages = Array.from(allImages);
 
   function openLightbox(index) {
     currentIndex = index;
@@ -328,14 +329,9 @@
     lightboxImg.style.transform = "scale(1)";
   }
 
-  function showNext() {
-    openLightbox((currentIndex + 1) % visibleImages.length);
-  }
-  function showPrev() {
-    openLightbox((currentIndex - 1 + visibleImages.length) % visibleImages.length);
-  }
+  function showNext() { openLightbox((currentIndex + 1) % visibleImages.length); }
+  function showPrev() { openLightbox((currentIndex - 1 + visibleImages.length) % visibleImages.length); }
 
-  // Attach click events
   allImages.forEach((img) => {
     img.addEventListener('click', () => {
       visibleImages = Array.from(allImages).filter(i => i.style.display !== "none");
@@ -355,24 +351,16 @@
     }
   });
 
-  lightbox.addEventListener('click', (e) => {
-    if (e.target === lightbox) closeLightbox();
-  });
+  lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
 
   // Zoom toggle
   lightboxImg.addEventListener('click', (e) => {
     e.stopPropagation();
     zoomActive = !zoomActive;
-    if (zoomActive) {
-      lightboxImg.style.transform = "scale(2)";
-      lightboxImg.style.cursor = "zoom-out";
-    } else {
-      lightboxImg.style.transform = "scale(1)";
-      lightboxImg.style.cursor = "zoom-in";
-    }
+    lightboxImg.style.transform = zoomActive ? "scale(2)" : "scale(1)";
+    lightboxImg.style.cursor = zoomActive ? "zoom-out" : "zoom-in";
   });
 
-  // Move zoom with cursor
   lightboxImgContainer.addEventListener('mousemove', (e) => {
     if (!zoomActive) return;
     const rect = lightboxImgContainer.getBoundingClientRect();
@@ -389,6 +377,31 @@
       const caption = img.getAttribute("data-caption").toLowerCase();
       img.style.display = caption.includes(term) ? "block" : "none";
     });
+  });
+
+  // SORT FUNCTION
+  const sortSelect = document.getElementById("sortSelect");
+  function parseDate(caption) {
+    const match = caption.match(/Taken:\s*([\d-]+)/);
+    return match ? new Date(match[1]) : null;
+  }
+
+  sortSelect.addEventListener("change", () => {
+    const order = sortSelect.value;
+    const imgs = Array.from(gallery.querySelectorAll("img"));
+
+    imgs.sort((a, b) => {
+      const da = parseDate(a.getAttribute("data-caption"));
+      const db = parseDate(b.getAttribute("data-caption"));
+
+      if (!da && !db) return 0;
+      if (!da) return 1; // Unknown goes last
+      if (!db) return -1;
+
+      return order === "newest" ? db - da : da - db;
+    });
+
+    imgs.forEach(img => gallery.appendChild(img));
   });
   </script>
 </body>
