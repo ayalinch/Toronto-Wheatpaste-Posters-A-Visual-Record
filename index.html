@@ -46,23 +46,22 @@
     .menu button:hover {
       background: #1e40af;
     }
-
 .gallery {
   display: grid;
   grid-template-columns: repeat(3, 1fr); /* 3 per row */
-  gap: 10px;          /* small space between posters */
-  width: 100%;
-  margin: 0 auto;
-  padding: 0 20px;    /* small left/right padding */
+  gap: 15px;              /* space between posters */
+  max-width: 95vw;        /* gallery takes up 95% of screen width */
+  margin: 0 auto;         /* centers it */
+  padding: 0;             /* no internal padding needed */
   box-sizing: border-box;
 }
 
 .gallery img {
   width: 100%;
   height: auto;
-  max-height: 90vh;   /* posters stay tall */
+  max-height: 85vh;       /* keep posters tall but not overflowing */
   object-fit: contain;
-  border-radius: 6px; /* subtle rounded corners */
+  border-radius: 6px;
   display: block;
 }
 
