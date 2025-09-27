@@ -52,15 +52,14 @@
   grid-template-columns: repeat(3, 1fr); /* 3 per row */
   gap: 20px;
   width: 100%;
-  max-width: 100vw;   /* take full width */
-  height: 90vh;       /* nearly full screen height */
+  max-width: 1600px;  /* makes them wide */
   margin: 0 auto;
 }
 
 .gallery img {
   width: 100%;
-  height: 100%;       /* fill grid cell vertically */
-  object-fit: cover;  /* fill without stretching */
+  height: auto;        /* keeps original proportions */
+  object-fit: contain; /* no cutting */
   border-radius: 12px;
   background: white;
 }
