@@ -50,17 +50,19 @@
 .gallery {
   display: grid;
   grid-template-columns: repeat(3, 1fr); /* 3 per row */
-  gap: 20px;
+  gap: 10px;          /* small space between posters */
   width: 100%;
-  max-width: 100%;   /* take full screen width */
   margin: 0 auto;
+  padding: 0 20px;    /* small left/right padding */
+  box-sizing: border-box;
 }
 
 .gallery img {
-  width: auto;          /* let image decide width */
-  height: 90vh;         /* scale up so posters nearly fill screen height */
-  object-fit: contain;  /* show whole image */
-  margin: 0 auto;       /* center inside its grid cell */
+  width: 100%;
+  height: auto;
+  max-height: 90vh;   /* posters stay tall */
+  object-fit: contain;
+  border-radius: 6px; /* subtle rounded corners */
   display: block;
 }
 
