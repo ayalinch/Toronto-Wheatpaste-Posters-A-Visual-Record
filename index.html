@@ -289,91 +289,100 @@
   </div>
 
   <script>
-    function showPage(pageId) {
-      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-      document.getElementById(pageId).classList.add('active');
+  function showPage(pageId) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById(pageId).classList.add('active');
+  }
+
+  const allImages = document.querySelectorAll('.gallery img');
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImg = document.getElementById('lightbox-img');
+  const lightboxCaption = document.getElementById('lightbox-caption');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const lightboxImgContainer = document.querySelector('.lightbox-img-container');
+
+  let currentIndex = -1;
+  let zoomActive = false;
+  let visibleImages = Array.from(allImages); // start with all
+
+  function openLightbox(index) {
+    currentIndex = index;
+    const img = visibleImages[index];
+    lightboxImg.src = img.src;
+    lightboxCaption.innerHTML = img.getAttribute('data-caption');
+    lightbox.style.display = 'flex';
+  }
+
+  function closeLightbox() {
+    lightbox.style.display = 'none';
+    lightboxImg.src = "";
+    lightboxCaption.textContent = "";
+    zoomActive = false;
+    lightboxImg.style.transform = "scale(1)";
+  }
+
+  function showNext() {
+    openLightbox((currentIndex + 1) % visibleImages.length);
+  }
+  function showPrev() {
+    openLightbox((currentIndex - 1 + visibleImages.length) % visibleImages.length);
+  }
+
+  // Attach click events
+  allImages.forEach((img) => {
+    img.addEventListener('click', () => {
+      // rebuild visibleImages list when opening lightbox
+      visibleImages = Array.from(allImages).filter(i => i.style.display !== "none");
+      currentIndex = visibleImages.indexOf(img);
+      openLightbox(currentIndex);
+    });
+  });
+
+  prevBtn.addEventListener('click', showPrev);
+  nextBtn.addEventListener('click', showNext);
+
+  document.addEventListener('keydown', (e) => {
+    if (lightbox.style.display === 'flex') {
+      if (e.key === 'ArrowRight') showNext();
+      if (e.key === 'ArrowLeft') showPrev();
+      if (e.key === 'Escape') closeLightbox();
     }
+  });
 
-    const images = document.querySelectorAll('.gallery img');
-    const lightbox = document.getElementById('lightbox');
-    const lightboxImg = document.getElementById('lightbox-img');
-    const lightboxCaption = document.getElementById('lightbox-caption');
-    const prevBtn = document.getElementById('prevBtn');
-    const nextBtn = document.getElementById('nextBtn');
-    const lightboxImgContainer = document.querySelector('.lightbox-img-container');
+  lightbox.addEventListener('click', (e) => {
+    if (e.target === lightbox) closeLightbox();
+  });
 
-    let currentIndex = -1;
-    let zoomActive = false;
-
-    function openLightbox(index) {
-      currentIndex = index;
-      const img = images[index];
-      lightboxImg.src = img.src;
-      lightboxCaption.innerHTML = img.getAttribute('data-caption');
-      lightbox.style.display = 'flex';
-    }
-
-    function closeLightbox() {
-      lightbox.style.display = 'none';
-      lightboxImg.src = "";
-      lightboxCaption.textContent = "";
-      zoomActive = false;
+  // Zoom toggle
+  lightboxImg.addEventListener('click', (e) => {
+    e.stopPropagation();
+    zoomActive = !zoomActive;
+    if (zoomActive) {
+      lightboxImg.style.transform = "scale(2)";
+      lightboxImg.style.cursor = "zoom-out";
+    } else {
       lightboxImg.style.transform = "scale(1)";
+      lightboxImg.style.cursor = "zoom-in";
     }
+  });
 
-    function showNext() { openLightbox((currentIndex + 1) % images.length); }
-    function showPrev() { openLightbox((currentIndex - 1 + images.length) % images.length); }
+  // Move zoom with cursor
+  lightboxImgContainer.addEventListener('mousemove', (e) => {
+    if (!zoomActive) return;
+    const rect = lightboxImgContainer.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width) * 100;
+    const y = ((e.clientY - rect.top) / rect.height) * 100;
+    lightboxImg.style.transformOrigin = `${x}% ${y}%`;
+  });
 
-    images.forEach((img, index) => {
-      img.addEventListener('click', () => openLightbox(index));
+  // SEARCH FUNCTION
+  const searchBox = document.getElementById("searchBox");
+  searchBox.addEventListener("input", () => {
+    const term = searchBox.value.toLowerCase();
+    allImages.forEach(img => {
+      const caption = img.getAttribute("data-caption").toLowerCase();
+      img.style.display = caption.includes(term) ? "block" : "none";
     });
-
-    prevBtn.addEventListener('click', showPrev);
-    nextBtn.addEventListener('click', showNext);
-
-    document.addEventListener('keydown', (e) => {
-      if (lightbox.style.display === 'flex') {
-        if (e.key === 'ArrowRight') showNext();
-        if (e.key === 'ArrowLeft') showPrev();
-        if (e.key === 'Escape') closeLightbox();
-      }
-    });
-
-    lightbox.addEventListener('click', (e) => {
-      if (e.target === lightbox) closeLightbox();
-    });
-
-    // Zoom toggle
-    lightboxImg.addEventListener('click', (e) => {
-      e.stopPropagation();
-      zoomActive = !zoomActive;
-      if (zoomActive) {
-        lightboxImg.style.transform = "scale(2)";
-        lightboxImg.style.cursor = "zoom-out";
-      } else {
-        lightboxImg.style.transform = "scale(1)";
-        lightboxImg.style.cursor = "zoom-in";
-      }
-    });
-
-    // Move zoom with cursor
-    lightboxImgContainer.addEventListener('mousemove', (e) => {
-      if (!zoomActive) return;
-      const rect = lightboxImgContainer.getBoundingClientRect();
-      const x = ((e.clientX - rect.left) / rect.width) * 100;
-      const y = ((e.clientY - rect.top) / rect.height) * 100;
-      lightboxImg.style.transformOrigin = `${x}% ${y}%`;
-    });
-
-    // SEARCH FUNCTION
-    const searchBox = document.getElementById("searchBox");
-    searchBox.addEventListener("input", () => {
-      const term = searchBox.value.toLowerCase();
-      images.forEach(img => {
-        const caption = img.getAttribute("data-caption").toLowerCase();
-        img.style.display = caption.includes(term) ? "block" : "none";
-      });
-    });
-  </script>
-</body>
-</html>
+  });
+</script>
