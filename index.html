@@ -9,7 +9,7 @@
       font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
       margin: 0;
       min-height: 100vh;
-      background: #f0f0f0; /* light grey */
+      background: #f0f0f0;
     }
 
     .container {
@@ -90,15 +90,11 @@
       width: 100%;
       height: 100%;
       object-fit: contain;
-      transition: transform 0.2s ease;
+      transition: transform 0.1s ease;
       cursor: zoom-in;
     }
     .lightbox-img-container img.zoomed {
-      transform: scale(2);
-      cursor: grab;
-    }
-    .lightbox-img-container img.dragging {
-      cursor: grabbing;
+      cursor: crosshair;
     }
 
     .caption {
@@ -141,7 +137,6 @@
       <h2>Posters</h2>
       <button onclick="showPage('landing')">⬅ Back</button>
       <div class="gallery">
-        <!-- sample images -->
 <img src="IMG_0677.jpg" alt="Poster 7" data-caption="[MW Industries] Quad of MW Vintage Parody ads. Television Dinners | ADHD Doital | Perfectly Safe teen razors | Monatryl-TL Allergy Relief (@mwcorporations on Instagram)">
 <img src="IMG_5918.jpg" alt="Poster 39" data-caption="[Sabrina Carpenter] Short N Sweet">
 <img src="IMG_3241.jpg" alt="Poster 25" data-caption="[Sabrina Carpenter] Sabrina Carpenter is Man’s Best Friend">
@@ -229,8 +224,7 @@
     const lightboxCaption = document.getElementById('lightbox-caption');
     const lightboxImgContainer = document.querySelector('.lightbox-img-container');
 
-    let isDragging = false;
-    let startX, startY, translateX = 0, translateY = 0;
+    let zoomed = false;
 
     images.forEach(img => {
       img.addEventListener('click', () => {
@@ -244,10 +238,9 @@
       lightbox.style.display = 'none';
       lightboxImg.src = "";
       lightboxCaption.textContent = "";
-      lightboxImg.classList.remove('zoomed', 'dragging');
-      translateX = 0;
-      translateY = 0;
+      lightboxImg.classList.remove('zoomed');
       lightboxImg.style.transform = "scale(1)";
+      zoomed = false;
     }
 
     lightbox.addEventListener('click', (e) => {
@@ -257,43 +250,23 @@
     // Toggle zoom on click
     lightboxImg.addEventListener('click', (e) => {
       e.stopPropagation();
-      if (lightboxImg.classList.contains('zoomed')) {
-        // Reset zoom
-        lightboxImg.classList.remove('zoomed', 'dragging');
-        translateX = 0;
-        translateY = 0;
+      zoomed = !zoomed;
+      if (!zoomed) {
+        lightboxImg.classList.remove('zoomed');
         lightboxImg.style.transform = "scale(1)";
       } else {
-        // Zoom in
         lightboxImg.classList.add('zoomed');
-        lightboxImg.style.transform = `scale(2) translate(0px, 0px)`;
       }
     });
 
-    // Dragging logic
-    lightboxImgContainer.addEventListener('mousedown', (e) => {
-      if (!lightboxImg.classList.contains('zoomed')) return;
-      isDragging = true;
-      startX = e.clientX - translateX;
-      startY = e.clientY - translateY;
-      lightboxImg.classList.add('dragging');
-    });
-
+    // Follow mouse when zoomed
     lightboxImgContainer.addEventListener('mousemove', (e) => {
-      if (!isDragging) return;
-      translateX = e.clientX - startX;
-      translateY = e.clientY - startY;
-      lightboxImg.style.transform = `scale(2) translate(${translateX}px, ${translateY}px)`;
-    });
-
-    lightboxImgContainer.addEventListener('mouseup', () => {
-      isDragging = false;
-      lightboxImg.classList.remove('dragging');
-    });
-
-    lightboxImgContainer.addEventListener('mouseleave', () => {
-      isDragging = false;
-      lightboxImg.classList.remove('dragging');
+      if (!zoomed) return;
+      const rect = lightboxImgContainer.getBoundingClientRect();
+      const x = ((e.clientX - rect.left) / rect.width) * 100;
+      const y = ((e.clientY - rect.top) / rect.height) * 100;
+      lightboxImg.style.transformOrigin = `${x}% ${y}%`;
+      lightboxImg.style.transform = "scale(2)";
     });
   </script>
 </body>
