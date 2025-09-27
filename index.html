@@ -52,16 +52,16 @@
   grid-template-columns: repeat(3, 1fr); /* 3 per row */
   gap: 20px;
   width: 100%;
-  max-width: 1600px;  /* makes them wide */
+  max-width: 100%;   /* take full screen width */
   margin: 0 auto;
 }
 
 .gallery img {
-  width: 100%;
-  height: 100%;        /* keeps original proportions */
-  object-fit: contain; /* no cutting */
-  border-radius: 12px;
-  background: white;
+  width: auto;          /* let image decide width */
+  height: 90vh;         /* scale up so posters nearly fill screen height */
+  object-fit: contain;  /* show whole image */
+  margin: 0 auto;       /* center inside its grid cell */
+  display: block;
 }
 
     /* Small screens */
