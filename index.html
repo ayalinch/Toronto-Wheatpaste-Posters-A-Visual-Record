@@ -15,23 +15,6 @@
     .container { width: 100%; text-align: center; }
     h2 { margin-bottom: 20px; }
 
-    .menu {
-      display: flex;
-      justify-content: center;
-      gap: 30px;
-    }
-    .menu button {
-      padding: 16px 28px;
-      font-size: 18px;
-      border: none;
-      border-radius: 10px;
-      background: #2563eb;
-      color: white;
-      cursor: pointer;
-      transition: background 0.2s ease;
-    }
-    .menu button:hover { background: #1e40af; }
-
     /* LANDING PAGE COLLAGE */
     #landing {
       position: relative;
@@ -40,11 +23,11 @@
       background: black;
       color: white;
     }
-
     .collage {
       display: flex;
       flex-direction: row;
-      animation: scroll-horizontal 90s linear infinite; /* slow horizontal scroll */
+      width: 200%; /* doubled for seamless scroll */
+      animation: scroll-horizontal 120s linear infinite;
     }
     .collage img {
       height: 100vh;
@@ -55,7 +38,6 @@
       from { transform: translateX(0); }
       to { transform: translateX(-50%); }
     }
-
     .landing-title {
       position: absolute;
       top: 50%;
@@ -78,7 +60,6 @@
       margin: 0 auto;
       box-sizing: border-box;
     }
-
     .gallery img {
       width: 100%;
       height: auto;
@@ -89,6 +70,12 @@
       transition: transform 0.2s ease;
     }
     .gallery img:hover { transform: scale(1.02); }
+
+    /* BACK BUTTON */
+    #posters button {
+      margin-top: -10px;
+      margin-bottom: 10px;
+    }
 
     /* Lightbox */
     .lightbox {
@@ -108,6 +95,7 @@
       max-height: 90vh;
       border-radius: 8px;
       overflow: hidden;
+      position: relative;
     }
     .lightbox-img-container {
       flex: 0 0 60%;
@@ -140,10 +128,33 @@
       width: 30px; height: 30px;
       font-size: 18px;
       cursor: pointer;
+      z-index: 1010;
     }
+    .arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255,255,255,0.8);
+      border: none;
+      border-radius: 50%;
+      width: 40px; height: 40px;
+      font-size: 20px;
+      cursor: pointer;
+      z-index: 1010;
+    }
+    .arrow.left { left: 10px; }
+    .arrow.right { right: 10px; }
 
-    .page { display: none; }
-    .active { display: block; }
+    /* Page transitions */
+    .page {
+      display: none;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+    .page.active {
+      display: block;
+      opacity: 1;
+    }
   </style>
 </head>
 <body>
@@ -152,20 +163,11 @@
     <!-- Landing Page -->
     <div id="landing" class="page active">
       <div class="collage">
-        <!-- Repeat images twice for seamless loop -->
-        <img src="IMG_0677.jpg" alt="">
-        <img src="IMG_5918.jpg" alt="">
-        <img src="IMG_3241.jpg" alt="">
-        <img src="IMG_3021.jpg" alt="">
-        <img src="IMG_1672.jpg" alt="">
-        <img src="IMG_5378.jpg" alt="">
-        <!-- repeat again for smooth loop -->
-        <img src="IMG_0677.jpg" alt="">
-        <img src="IMG_5918.jpg" alt="">
-        <img src="IMG_3241.jpg" alt="">
-        <img src="IMG_3021.jpg" alt="">
-        <img src="IMG_1672.jpg" alt="">
-        <img src="IMG_5378.jpg" alt="">
+        <!-- Images duplicated for smooth infinite scroll -->
+        <img src="IMG_0677.jpg"><img src="IMG_5918.jpg"><img src="IMG_3241.jpg">
+        <img src="IMG_3021.jpg"><img src="IMG_1672.jpg"><img src="IMG_5378.jpg">
+        <img src="IMG_0677.jpg"><img src="IMG_5918.jpg"><img src="IMG_3241.jpg">
+        <img src="IMG_3021.jpg"><img src="IMG_1672.jpg"><img src="IMG_5378.jpg">
       </div>
       <div class="landing-title" onclick="showPage('posters')">
         Toronto Wheat Paste Posters by Sarah Kim
@@ -230,6 +232,7 @@
 <img src="IMG_1890.jpg" alt="Poster 21" data-caption="[Indie Artist: arcanebullshit.com ] Read the “animal titles” they’re quite hilarious (ie. Giraffe is referred to ‘The Reacher’ and where Hippo is a ‘Bog Cow’)">
 <img src="IMG_5184.jpg" alt="Poster 31" data-caption="[Fairgrounds] Court Time > Screen Time. Public Raquet Club">
 <img src="IMG_1887.jpg" alt="Poster 33" data-caption="[Indie Artist: Arcanebullshit.com] ‘The Squirrel Council has decided’ (I suggest zooming up on the ‘names’ of the squirrels, they are also hilarious ‘corn’ and ‘beefcake supreme’ for example)">
+        <!-- (keep adding the rest of your posters here) -->
       </div>
     </div>
   </div>
@@ -237,6 +240,8 @@
   <!-- Lightbox -->
   <div class="lightbox" id="lightbox">
     <button class="close" onclick="closeLightbox()">×</button>
+    <button class="arrow left" id="prevBtn">‹</button>
+    <button class="arrow right" id="nextBtn">›</button>
     <div class="lightbox-content">
       <div class="lightbox-img-container">
         <img id="lightbox-img" src="" alt="">
@@ -255,17 +260,20 @@
     const lightbox = document.getElementById('lightbox');
     const lightboxImg = document.getElementById('lightbox-img');
     const lightboxCaption = document.getElementById('lightbox-caption');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
     const lightboxImgContainer = document.querySelector('.lightbox-img-container');
 
+    let currentIndex = -1;
     let zoomActive = false;
 
-    images.forEach(img => {
-      img.addEventListener('click', () => {
-        lightbox.style.display = 'flex';
-        lightboxImg.src = img.src;
-        lightboxCaption.textContent = img.getAttribute('data-caption');
-      });
-    });
+    function openLightbox(index) {
+      currentIndex = index;
+      const img = images[index];
+      lightboxImg.src = img.src;
+      lightboxCaption.textContent = img.getAttribute('data-caption');
+      lightbox.style.display = 'flex';
+    }
 
     function closeLightbox() {
       lightbox.style.display = 'none';
@@ -275,11 +283,33 @@
       lightboxImg.style.transform = "scale(1)";
     }
 
+    function showNext() {
+      openLightbox((currentIndex + 1) % images.length);
+    }
+    function showPrev() {
+      openLightbox((currentIndex - 1 + images.length) % images.length);
+    }
+
+    images.forEach((img, index) => {
+      img.addEventListener('click', () => openLightbox(index));
+    });
+
+    prevBtn.addEventListener('click', showPrev);
+    nextBtn.addEventListener('click', showNext);
+
+    document.addEventListener('keydown', (e) => {
+      if (lightbox.style.display === 'flex') {
+        if (e.key === 'ArrowRight') showNext();
+        if (e.key === 'ArrowLeft') showPrev();
+        if (e.key === 'Escape') closeLightbox();
+      }
+    });
+
     lightbox.addEventListener('click', (e) => {
       if (e.target === lightbox) closeLightbox();
     });
 
-    // Toggle zoom mode on click
+    // Zoom toggle
     lightboxImg.addEventListener('click', (e) => {
       e.stopPropagation();
       zoomActive = !zoomActive;
@@ -292,7 +322,7 @@
       }
     });
 
-    // Follow cursor if zoom is active
+    // Move zoom with cursor
     lightboxImgContainer.addEventListener('mousemove', (e) => {
       if (!zoomActive) return;
       const rect = lightboxImgContainer.getBoundingClientRect();
