@@ -244,11 +244,15 @@
     });
 
     // Toggle zoom mode on click
-    lightboxImg.addEventListener('click', () => {
+    lightboxImg.addEventListener('click', (e) => {
+      e.stopPropagation(); // prevent closing
       zoomActive = !zoomActive;
-      if (!zoomActive) {
+      if (zoomActive) {
+        lightboxImg.style.transform = "scale(2)";
+        lightboxImg.style.cursor = "zoom-out";
+      } else {
         lightboxImg.style.transform = "scale(1)";
-        lightboxImg.style.transformOrigin = "center center";
+        lightboxImg.style.cursor = "zoom-in";
       }
     });
 
@@ -259,7 +263,6 @@
       const x = ((e.clientX - rect.left) / rect.width) * 100;
       const y = ((e.clientY - rect.top) / rect.height) * 100;
       lightboxImg.style.transformOrigin = `${x}% ${y}%`;
-      lightboxImg.style.transform = "scale(2)";
     });
   </script>
 </body>
