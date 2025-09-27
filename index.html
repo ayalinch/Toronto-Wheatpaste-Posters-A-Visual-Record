@@ -271,7 +271,7 @@
       currentIndex = index;
       const img = images[index];
       lightboxImg.src = img.src;
-      lightboxCaption.textContent = img.getAttribute('data-caption');
+      lightboxCaption.innerHTML = img.getAttribute('data-caption');
       lightbox.style.display = 'flex';
     }
 
