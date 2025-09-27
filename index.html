@@ -11,6 +11,7 @@
       min-height: 100vh;
       background: #000;
       color: white;
+      overflow-x: hidden;
     }
 
     .container { width: 100%; text-align: center; }
@@ -26,49 +27,56 @@
       overflow: hidden;
     }
 
+    /* Infinite scrolling collage background */
+    .collage-strip {
+      display: flex;
+      position: absolute;
+      top: 0; left: 0;
+      height: 100%;
+      animation: scroll 60s linear infinite;
+    }
+
+    .collage-strip img {
+      height: 100%;
+      object-fit: cover;
+    }
+
+    @keyframes scroll {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+
     #landing::before {
       content: "";
       position: absolute;
       top: 0; left: 0;
       width: 100%; height: 100%;
-      background: rgba(0,0,0,0.5); /* dark overlay */
+      background: rgba(0,0,0,0.65);
       z-index: 1;
-    }
-
-    .collage {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
-      grid-auto-rows: 80px;
-      gap: 2px;
-      width: 100%;
-      height: 100%;
-    }
-
-    .collage img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
     }
 
     .landing-overlay {
       position: absolute;
       z-index: 2;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
       text-align: center;
     }
 
-    .landing-text {
+    h2 {
       font-size: 2.2rem;
-      font-weight: bold;
+      margin-bottom: 20px;
+    }
+
+    .menu button {
+      padding: 16px 28px;
+      font-size: 18px;
+      border: none;
+      border-radius: 10px;
+      background: #2563eb;
+      color: white;
       cursor: pointer;
-      transition: color 0.2s ease;
+      transition: background 0.2s ease;
     }
-    .landing-text:hover {
-      color: #60a5fa; /* light blue on hover */
-    }
+    .menu button:hover { background: #1e40af; }
 
     /* Posters gallery */
     .gallery {
@@ -151,65 +159,53 @@
   <div class="container">
     <!-- Landing Page -->
     <div id="landing" class="page active">
-      <div class="collage">
-        <!-- a bunch of tiny posters -->
-        <img src="IMG_0289.jpg">
-        <img src="IMG_0290.jpg">
-        <img src="IMG_0291.jpg">
-        <img src="IMG_0315.jpg">
-        <img src="IMG_0316.jpg">
-        <img src="IMG_0318.jpg">
-        <img src="IMG_0677.jpg">
-        <img src="IMG_1028.jpg">
-        <img src="IMG_1030.jpg">
-        <img src="IMG_1031.jpg">
-        <img src="IMG_1032.jpg">
-        <img src="IMG_1034.jpg">
-        <img src="IMG_1275.jpg">
-        <img src="IMG_1276.jpg">
-        <img src="IMG_1277.jpg">
-        <img src="IMG_1279.jpg">
-        <img src="IMG_1282.jpg">
-        <img src="IMG_1672.jpg">
-        <img src="IMG_1674.jpg">
-        <img src="IMG_1688.jpg">
-        <img src="IMG_1887.jpg">
-        <img src="IMG_1890.jpg">
-        <img src="IMG_1891.jpg">
-        <img src="IMG_1977.jpg">
-        <img src="IMG_3021.jpg">
-        <img src="IMG_3199.jpg">
-        <img src="IMG_3241.jpg">
-        <img src="IMG_3291.jpg">
-        <img src="IMG_3957.jpg">
-        <img src="IMG_4086.jpg">
-        <img src="IMG_4087.jpg">
-        <img src="IMG_4710.jpg">
-        <img src="IMG_5184.jpg">
-        <img src="IMG_5185.jpg">
-        <img src="IMG_5375.jpg">
-        <img src="IMG_5378.jpg">
-        <img src="IMG_5394.jpg">
-        <img src="IMG_5395.jpg">
-        <img src="IMG_5915.jpg">
-        <img src="IMG_5916.jpg">
-        <img src="IMG_5918.jpg">
-        <img src="IMG_6671.jpg">
-        <img src="IMG_6672.jpg">
-        <img src="IMG_6673.jpg">
-        <img src="IMG_7141.jpg">
-        <img src="IMG_7142.jpg">
-        <img src="IMG_8586.jpg">
-        <img src="IMG_8587.jpg">
-        <img src="IMG_8607.jpg">
-        <img src="IMG_8608.jpg">
-        <img src="IMG_9210.jpg">
-        <img src="IMG_9460.jpg">
-        <img src="IMG_9824.jpg">
+      <!-- Infinite collage (two strips duplicated for seamless scroll) -->
+      <div class="collage-strip">
+        <!-- Put your images here, only .jpg for browser safety -->
+        <img src="IMG_0289.jpg"><img src="IMG_0290.jpg"><img src="IMG_0291.jpg">
+        <img src="IMG_0315.jpg"><img src="IMG_0316.jpg"><img src="IMG_0318.jpg">
+        <img src="IMG_0677.jpg"><img src="IMG_1028.jpg"><img src="IMG_1030.jpg">
+        <img src="IMG_1031.jpg"><img src="IMG_1032.jpg"><img src="IMG_1034.jpg">
+        <img src="IMG_1275.jpg"><img src="IMG_1276.jpg"><img src="IMG_1277.jpg">
+        <img src="IMG_1279.jpg"><img src="IMG_1282.jpg"><img src="IMG_1672.jpg">
+        <img src="IMG_1674.jpg"><img src="IMG_1688.jpg"><img src="IMG_1887.jpg">
+        <img src="IMG_1890.jpg"><img src="IMG_1891.jpg"><img src="IMG_1977.jpg">
+        <img src="IMG_3021.jpg"><img src="IMG_3199.jpg"><img src="IMG_3241.jpg">
+        <img src="IMG_3291.jpg"><img src="IMG_3957.jpg"><img src="IMG_4086.jpg">
+        <img src="IMG_4087.jpg"><img src="IMG_4710.jpg"><img src="IMG_5184.jpg">
+        <img src="IMG_5185.jpg"><img src="IMG_5375.jpg"><img src="IMG_5378.jpg">
+        <img src="IMG_5394.jpg"><img src="IMG_5395.jpg"><img src="IMG_5915.jpg">
+        <img src="IMG_5916.jpg"><img src="IMG_5918.jpg"><img src="IMG_6671.jpg">
+        <img src="IMG_6672.jpg"><img src="IMG_6673.jpg"><img src="IMG_7141.jpg">
+        <img src="IMG_7142.jpg"><img src="IMG_8586.jpg"><img src="IMG_8587.jpg">
+        <img src="IMG_8607.jpg"><img src="IMG_8608.jpg"><img src="IMG_9210.jpg">
+        <img src="IMG_9460.jpg"><img src="IMG_9824.jpg">
+
+        <!-- Duplicate set for infinite loop -->
+        <img src="IMG_0289.jpg"><img src="IMG_0290.jpg"><img src="IMG_0291.jpg">
+        <img src="IMG_0315.jpg"><img src="IMG_0316.jpg"><img src="IMG_0318.jpg">
+        <img src="IMG_0677.jpg"><img src="IMG_1028.jpg"><img src="IMG_1030.jpg">
+        <img src="IMG_1031.jpg"><img src="IMG_1032.jpg"><img src="IMG_1034.jpg">
+        <img src="IMG_1275.jpg"><img src="IMG_1276.jpg"><img src="IMG_1277.jpg">
+        <img src="IMG_1279.jpg"><img src="IMG_1282.jpg"><img src="IMG_1672.jpg">
+        <img src="IMG_1674.jpg"><img src="IMG_1688.jpg"><img src="IMG_1887.jpg">
+        <img src="IMG_1890.jpg"><img src="IMG_1891.jpg"><img src="IMG_1977.jpg">
+        <img src="IMG_3021.jpg"><img src="IMG_3199.jpg"><img src="IMG_3241.jpg">
+        <img src="IMG_3291.jpg"><img src="IMG_3957.jpg"><img src="IMG_4086.jpg">
+        <img src="IMG_4087.jpg"><img src="IMG_4710.jpg"><img src="IMG_5184.jpg">
+        <img src="IMG_5185.jpg"><img src="IMG_5375.jpg"><img src="IMG_5378.jpg">
+        <img src="IMG_5394.jpg"><img src="IMG_5395.jpg"><img src="IMG_5915.jpg">
+        <img src="IMG_5916.jpg"><img src="IMG_5918.jpg"><img src="IMG_6671.jpg">
+        <img src="IMG_6672.jpg"><img src="IMG_6673.jpg"><img src="IMG_7141.jpg">
+        <img src="IMG_7142.jpg"><img src="IMG_8586.jpg"><img src="IMG_8587.jpg">
+        <img src="IMG_8607.jpg"><img src="IMG_8608.jpg"><img src="IMG_9210.jpg">
+        <img src="IMG_9460.jpg"><img src="IMG_9824.jpg">
       </div>
+
       <div class="landing-overlay">
-        <div class="landing-text" onclick="showPage('posters')">
-          Toronto Wheat Paste Posters by Sarah Kim
+        <h2>Welcome — Choose a Section</h2>
+        <div class="menu">
+          <button onclick="showPage('posters')">📜 Posters</button>
         </div>
       </div>
     </div>
@@ -219,7 +215,7 @@
       <h2>Posters</h2>
       <button onclick="showPage('landing')">⬅ Back</button>
       <div class="gallery">
- <img src="IMG_0677.jpg" alt="Poster 7" data-caption="[MW Industries] Quad of MW Vintage Parody ads. Television Dinners | ADHD Doital | Perfectly Safe teen razors | Monatryl-TL Allergy Relief (@mwcorporations on Instagram)">
+<img src="IMG_0677.jpg" alt="Poster 7" data-caption="[MW Industries] Quad of MW Vintage Parody ads. Television Dinners | ADHD Doital | Perfectly Safe teen razors | Monatryl-TL Allergy Relief (@mwcorporations on Instagram)">
 <img src="IMG_5918.jpg" alt="Poster 39" data-caption="[Sabrina Carpenter] Short N Sweet">
 <img src="IMG_3241.jpg" alt="Poster 25" data-caption="[Sabrina Carpenter] Sabrina Carpenter is Man’s Best Friend">
 <img src="IMG_3021.jpg" alt="Poster 32" data-caption="[FORA] Forget everything you know about travel agents">
