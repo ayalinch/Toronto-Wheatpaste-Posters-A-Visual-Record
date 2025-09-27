@@ -5,36 +5,45 @@
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>Unprotected Site</title>
   <style>
-    :root{--bg:#f8fafc;--card:#fff;--accent:#2563eb}
-    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
-         margin:0; min-height:100vh; display:flex;align-items:center;
-         justify-content:center;background:var(--bg)}
-
-    /* Card container */
-    .card{background:var(--card); padding:28px; border-radius:12px;
-          box-shadow:0 8px 40px rgba(2,6,23,.08);
-          width:min(720px,94vw); text-align:center}
-
-    /* Fullscreen gallery */
-    .gallery{
+    :root{--bg:ivory;--card:#fff;--accent:#2563eb}
+    body{
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
+      margin:0;
+      min-height:100vh;
       display:flex;
-      justify-content:space-between;
       align-items:center;
-      gap:0;
-      width:100vw;
-      height:100vh;
-      background-color:#ffe6f2; /* light pink */
-      overflow:hidden;
+      justify-content:center;
+      background:var(--bg);
+    }
+
+    .card{
+      background:var(--card);
+      padding:28px;
+      border-radius:12px;
+      box-shadow:0 8px 40px rgba(2,6,23,.08);
+      width:min(900px,94vw);
+      text-align:center;
+    }
+
+    /* Gallery grid */
+    .gallery{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap:15px;
+      margin-top:20px;
     }
     .gallery img{
-      flex:1;
-      height:100%;
+      width:100%;
+      height:auto;
+      border-radius:8px;
       object-fit:cover;
     }
+
     /* Small screens: stack vertically */
     @media (max-width:768px){
-      .gallery{flex-direction:column; height:auto}
-      .gallery img{width:100%; height:33vh}
+      .gallery{
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
@@ -43,7 +52,6 @@
     <h3>Welcome — Private Content (Now Public)</h3>
     <p>This site is temporarily unprotected.</p>
 
-    <!-- Fullscreen 3-image gallery -->
     <div class="gallery">
       <img src="IMG_3021.HEIC" alt="Photo 1" />
       <img src="myphoto2.jpg" alt="Photo 2" />
@@ -52,4 +60,3 @@
   </div>
 </body>
 </html>
-
