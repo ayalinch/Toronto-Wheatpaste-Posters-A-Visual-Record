@@ -3,26 +3,27 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>Toronto Wheat Paste Posters</title>
+  <title>Interactive Site</title>
   <style>
     body {
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
       margin: 0;
       min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
-      background: #000;
-      color: white;
+      background: #f0f0f0;
     }
 
-    h1 {
-      margin-bottom: 20px;
-      font-size: 2rem;
+    .container {
+      width: 100%;
       text-align: center;
     }
 
+    h2 { margin-bottom: 20px; }
+
+    .menu {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+    }
     .menu button {
       padding: 16px 28px;
       font-size: 18px;
@@ -34,50 +35,6 @@
       transition: background 0.2s ease;
     }
     .menu button:hover { background: #1e40af; }
-  </style>
-</head>
-<body>
-  <h1>Toronto Wheat Paste Posters<br>by Sarah Kim</h1>
-  <div class="menu">
-    <button onclick="location.href='posters.html'">📜 Enter Posters</button>
-  </div>
-</body>
-</html>
-
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>Posters</title>
-  <style>
-    body {
-      margin: 0;
-      min-height: 100vh;
-      background: #f0f0f0;
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
-    }
-
-    .container {
-      width: 100%;
-      text-align: center;
-      padding: 20px;
-    }
-
-    h2 { margin-bottom: 20px; }
-
-    button.back {
-      padding: 10px 18px;
-      font-size: 16px;
-      border: none;
-      border-radius: 6px;
-      background: #2563eb;
-      color: white;
-      cursor: pointer;
-      margin-bottom: 20px;
-      transition: background 0.2s ease;
-    }
-    button.back:hover { background: #1e40af; }
 
     .gallery {
       display: grid;
@@ -156,16 +113,27 @@
       font-size: 18px;
       cursor: pointer;
     }
+
+    .page { display: none; }
+    .active { display: block; }
   </style>
 </head>
 <body>
   <div class="container">
-    <h2>Posters</h2>
-    <button class="back" onclick="location.href='index.html'">⬅ Back</button>
+    <!-- Landing Page -->
+    <div id="landing" class="page active">
+      <h2>Welcome — Choose a Section</h2>
+      <div class="menu">
+        <button onclick="showPage('posters')">📜 Posters</button>
+        <button onclick="showPage('book')">📘 Book</button>
+      </div>
+    </div>
 
-    <!-- Gallery -->
-    <div class="gallery">
-      <!-- Example images — add your full list here -->
+    <!-- Posters Page -->
+    <div id="posters" class="page">
+      <h2>Posters</h2>
+      <button onclick="showPage('landing')">⬅ Back</button>
+      <div class="gallery">
 <img src="IMG_0677.jpg" alt="Poster 7" data-caption="[MW Industries] Quad of MW Vintage Parody ads. Television Dinners | ADHD Doital | Perfectly Safe teen razors | Monatryl-TL Allergy Relief (@mwcorporations on Instagram)">
 <img src="IMG_5918.jpg" alt="Poster 39" data-caption="[Sabrina Carpenter] Short N Sweet">
 <img src="IMG_3241.jpg" alt="Poster 25" data-caption="[Sabrina Carpenter] Sabrina Carpenter is Man’s Best Friend">
@@ -219,7 +187,14 @@
 <img src="IMG_1890.jpg" alt="Poster 21" data-caption="[Indie Artist: arcanebullshit.com ] Read the “animal titles” they’re quite hilarious (ie. Giraffe is referred to ‘The Reacher’ and where Hippo is a ‘Bog Cow’)">
 <img src="IMG_5184.jpg" alt="Poster 31" data-caption="[Fairgrounds] Court Time > Screen Time. Public Raquet Club">
 <img src="IMG_1887.jpg" alt="Poster 33" data-caption="[Indie Artist: Arcanebullshit.com] ‘The Squirrel Council has decided’ (I suggest zooming up on the ‘names’ of the squirrels, they are also hilarious ‘corn’ and ‘beefcake supreme’ for example)">
-      <!-- … continue adding all your posters … -->
+      </div>
+    </div>
+
+    <!-- Book Page -->
+    <div id="book" class="page">
+      <h2>Book</h2>
+      <button onclick="showPage('landing')">⬅ Back</button>
+      <p>Here you can put book content later.</p>
     </div>
   </div>
 
@@ -235,13 +210,19 @@
   </div>
 
   <script>
+    function showPage(pageId) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.getElementById(pageId).classList.add('active');
+    }
+
     const images = document.querySelectorAll('.gallery img');
     const lightbox = document.getElementById('lightbox');
     const lightboxImg = document.getElementById('lightbox-img');
     const lightboxCaption = document.getElementById('lightbox-caption');
     const lightboxImgContainer = document.querySelector('.lightbox-img-container');
 
-    // Open lightbox
+    let zoomActive = false;
+
     images.forEach(img => {
       img.addEventListener('click', () => {
         lightbox.style.display = 'flex';
@@ -250,36 +231,38 @@
       });
     });
 
-    // Close lightbox
     function closeLightbox() {
       lightbox.style.display = 'none';
       lightboxImg.src = "";
       lightboxCaption.textContent = "";
+      zoomActive = false;
+      lightboxImg.style.transform = "scale(1)";
     }
+
     lightbox.addEventListener('click', (e) => {
       if (e.target === lightbox) closeLightbox();
     });
 
-    // Zoom effect (toggle on click, pan with mousemove)
-    let zoomed = false;
-    lightboxImgContainer.addEventListener('click', () => {
-      zoomed = !zoomed;
-      if (!zoomed) {
+    // Toggle zoom mode on click
+    lightboxImg.addEventListener('click', (e) => {
+      e.stopPropagation(); // prevent closing
+      zoomActive = !zoomActive;
+      if (zoomActive) {
+        lightboxImg.style.transform = "scale(2)";
+        lightboxImg.style.cursor = "zoom-out";
+      } else {
         lightboxImg.style.transform = "scale(1)";
         lightboxImg.style.cursor = "zoom-in";
-      } else {
-        lightboxImg.style.transform = "scale(2)";
-        lightboxImg.style.cursor = "move";
       }
     });
 
+    // Follow cursor if zoom is active
     lightboxImgContainer.addEventListener('mousemove', (e) => {
-      if (zoomed) {
-        const rect = lightboxImgContainer.getBoundingClientRect();
-        const x = ((e.clientX - rect.left) / rect.width) * 100;
-        const y = ((e.clientY - rect.top) / rect.height) * 100;
-        lightboxImg.style.transformOrigin = `${x}% ${y}%`;
-      }
+      if (!zoomActive) return;
+      const rect = lightboxImgContainer.getBoundingClientRect();
+      const x = ((e.clientX - rect.left) / rect.width) * 100;
+      const y = ((e.clientY - rect.top) / rect.height) * 100;
+      lightboxImg.style.transformOrigin = `${x}% ${y}%`;
     });
   </script>
 </body>
