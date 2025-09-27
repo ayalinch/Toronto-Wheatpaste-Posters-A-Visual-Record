@@ -12,8 +12,7 @@
       background: #f0f0f0;
     }
 
-    .container { width: 100%; text-align: center; }
-    h2 { margin: 0; }
+    .container { width: 100%; }
 
     /* LANDING PAGE COLLAGE */
     #landing {
@@ -22,6 +21,7 @@
       overflow: hidden;
       background: black;
       color: white;
+      text-align: center;
     }
     .collage {
       display: flex;
@@ -58,6 +58,12 @@
       padding: 12px 20px;
       background: #fff;
       border-bottom: 1px solid #ddd;
+    }
+
+    .posters-header h2 {
+      margin: 0;
+      flex: 1;
+      text-align: center;
     }
 
     .back-btn {
@@ -217,7 +223,7 @@
       </div>
 
       <div class="gallery">
-  <img src="IMG_0677.jpg" alt="Poster 7" data-caption="<div>[MW Industries] Quad of MW Vintage Parody ads. Television Dinners | ADHD Doital | Perfectly Safe teen razors | Monatryl-TL Allergy Relief (@mwcorporations on Instagram)</div><small>Taken: Unknown — Location: Unknown</small>">
+<img src="IMG_0677.jpg" alt="Poster 7" data-caption="<div>[MW Industries] Quad of MW Vintage Parody ads. Television Dinners | ADHD Doital | Perfectly Safe teen razors | Monatryl-TL Allergy Relief (@mwcorporations on Instagram)</div><small>Taken: Unknown — Location: Unknown</small>">
 <img src="IMG_5918.jpg" alt="Poster 39" data-caption="<div>[Sabrina Carpenter] Short N Sweet</div><small>Taken: Unknown — Location: Unknown</small>">
 <img src="IMG_3241.jpg" alt="Poster 25" data-caption="<div>[Sabrina Carpenter] Sabrina Carpenter is Man’s Best Friend</div><small>Taken: 2025-08-02 — Dundas Street West</small>">
 <img src="IMG_3021.jpg" alt="Poster 32" data-caption="<div>[FORA] Forget everything you know about travel agents</div><small>Taken: Unknown — Location: Unknown</small>">
@@ -270,7 +276,7 @@
 <img src="IMG_1890.jpg" alt="Poster 21" data-caption="<div>[Indie Artist: arcanebullshit.com] Read the “animal titles”...</div><small>Taken: 2025-05-09 — Bloor Street West</small>">
 <img src="IMG_5184.jpg" alt="Poster 31" data-caption="<div>[Fairgrounds] Court Time > Screen Time. Public Raquet Club</div><small>Taken: 2024-07-09 — Dundas Street West</small>">
 <img src="IMG_1887.jpg" alt="Poster 33" data-caption="<div>[Indie Artist: Arcanebullshit.com] ‘The Squirrel Council has decided’...</div><small>Taken: 2025-05-09 — Bloor Street West</small>">
-        <!-- (your posters stay here exactly as before, no change needed) -->
+        <!-- your poster <img> tags here -->
       </div>
     </div>
   </div>
@@ -332,7 +338,6 @@
   // Attach click events
   allImages.forEach((img) => {
     img.addEventListener('click', () => {
-      // rebuild visibleImages list when opening lightbox
       visibleImages = Array.from(allImages).filter(i => i.style.display !== "none");
       currentIndex = visibleImages.indexOf(img);
       openLightbox(currentIndex);
@@ -385,4 +390,6 @@
       img.style.display = caption.includes(term) ? "block" : "none";
     });
   });
-</script>
+  </script>
+</body>
+</html>
