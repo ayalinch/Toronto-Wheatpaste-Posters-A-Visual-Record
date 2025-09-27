@@ -93,6 +93,13 @@
       transition: transform 0.2s ease;
       cursor: zoom-in;
     }
+    .lightbox-img-container img.zoomed {
+      transform: scale(2);
+      cursor: grab;
+    }
+    .lightbox-img-container img.dragging {
+      cursor: grabbing;
+    }
 
     .caption {
       padding: 20px;
@@ -222,6 +229,9 @@
     const lightboxCaption = document.getElementById('lightbox-caption');
     const lightboxImgContainer = document.querySelector('.lightbox-img-container');
 
+    let isDragging = false;
+    let startX, startY, translateX = 0, translateY = 0;
+
     images.forEach(img => {
       img.addEventListener('click', () => {
         lightbox.style.display = 'flex';
@@ -234,23 +244,56 @@
       lightbox.style.display = 'none';
       lightboxImg.src = "";
       lightboxCaption.textContent = "";
+      lightboxImg.classList.remove('zoomed', 'dragging');
+      translateX = 0;
+      translateY = 0;
+      lightboxImg.style.transform = "scale(1)";
     }
 
     lightbox.addEventListener('click', (e) => {
       if (e.target === lightbox) closeLightbox();
     });
 
-    // Zoom effect
-    lightboxImgContainer.addEventListener('mousemove', (e) => {
-      const rect = lightboxImgContainer.getBoundingClientRect();
-      const x = ((e.clientX - rect.left) / rect.width) * 100;
-      const y = ((e.clientY - rect.top) / rect.height) * 100;
-      lightboxImg.style.transformOrigin = `${x}% ${y}%`;
-      lightboxImg.style.transform = "scale(2)";
+    // Toggle zoom on click
+    lightboxImg.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (lightboxImg.classList.contains('zoomed')) {
+        // Reset zoom
+        lightboxImg.classList.remove('zoomed', 'dragging');
+        translateX = 0;
+        translateY = 0;
+        lightboxImg.style.transform = "scale(1)";
+      } else {
+        // Zoom in
+        lightboxImg.classList.add('zoomed');
+        lightboxImg.style.transform = `scale(2) translate(0px, 0px)`;
+      }
     });
+
+    // Dragging logic
+    lightboxImgContainer.addEventListener('mousedown', (e) => {
+      if (!lightboxImg.classList.contains('zoomed')) return;
+      isDragging = true;
+      startX = e.clientX - translateX;
+      startY = e.clientY - translateY;
+      lightboxImg.classList.add('dragging');
+    });
+
+    lightboxImgContainer.addEventListener('mousemove', (e) => {
+      if (!isDragging) return;
+      translateX = e.clientX - startX;
+      translateY = e.clientY - startY;
+      lightboxImg.style.transform = `scale(2) translate(${translateX}px, ${translateY}px)`;
+    });
+
+    lightboxImgContainer.addEventListener('mouseup', () => {
+      isDragging = false;
+      lightboxImg.classList.remove('dragging');
+    });
+
     lightboxImgContainer.addEventListener('mouseleave', () => {
-      lightboxImg.style.transformOrigin = "center center";
-      lightboxImg.style.transform = "scale(1)";
+      isDragging = false;
+      lightboxImg.classList.remove('dragging');
     });
   </script>
 </body>
