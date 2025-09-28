@@ -369,13 +369,18 @@
   function showNext() { openLightbox((currentIndex + 1) % visibleImages.length); }
   function showPrev() { openLightbox((currentIndex - 1 + visibleImages.length) % visibleImages.length); }
 
-  allImages.forEach((img) => {
-    img.addEventListener('click', () => {
-      visibleImages = Array.from(allImages).filter(i => i.style.display !== "none");
-      currentIndex = visibleImages.indexOf(img);
-      openLightbox(currentIndex);
-    });
+// Attach click events, but scoped to the active page
+allImages.forEach((img) => {
+  img.addEventListener('click', () => {
+    // find the gallery inside the active page only
+    const currentPage = document.querySelector('.page.active .gallery');
+    visibleImages = Array.from(currentPage.querySelectorAll('img'))
+      .filter(i => i.style.display !== "none");
+    
+    currentIndex = visibleImages.indexOf(img);
+    openLightbox(currentIndex);
   });
+});
 
   prevBtn.addEventListener('click', showPrev);
   nextBtn.addEventListener('click', showNext);
